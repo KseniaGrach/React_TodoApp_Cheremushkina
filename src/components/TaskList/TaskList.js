@@ -3,7 +3,7 @@ import React from 'react';
 import './TaskList.css';
 import Task from '../Task';
 
-const TaskList = ( { todos }) => {
+const TaskList = ( { todos, onDeleted }) => {
 
     const elements = todos.map((item) => {
 
@@ -11,7 +11,9 @@ const TaskList = ( { todos }) => {
 
         return(
             <li key={ id }>
-                <Task { ...itemProps } />
+                <Task 
+                    { ...itemProps } 
+                    onDeleted={() => onDeleted(id)} />
             </li>
         );
     });
