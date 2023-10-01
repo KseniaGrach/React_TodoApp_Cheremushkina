@@ -7,23 +7,24 @@ export default class Task extends Component {
 
 
     state = {
-        completed: false
+        completed: false,
+        checked: false
     };
 
 
-    onLabelClick = () => {
-        this.setState(({completed}) => {
-            return {
-                completed: !completed
-            };
-        });
-    };
+    // onLabelClick = () => {
+    //     this.setState(({completed}) => {
+    //         return {
+    //             completed: !completed
+    //         };
+    //     });
+    // };
 
 
     render() {
 
-        const { label, value,onDeleted } = this.props;
-        const { completed } = this.state;
+        const { label, value, onDeleted, onToggleCompleted, completed, checked } = this.props;
+
 
         let classNames = "description";
 
@@ -33,17 +34,14 @@ export default class Task extends Component {
 
         return (
             <div className="view">
-                <input className="toggle" type="checkbox" onClick={ this.onLabelClick } />
+                <input className="toggle" type="checkbox" onClick={onToggleCompleted} readOnly checked={checked} />
                 <label>
-                    <span className={classNames} >{ label }</span>
-                    <span className="created">{ value }</span>
+                    <span className={classNames} >{label}</span>
+                    <span className="created">{value}</span>
                 </label>
                 <button className="icon icon-edit"></button>
                 <button className="icon icon-destroy" onClick={onDeleted}></button>
             </div>
         );
     };
-}
-
-
-
+};
