@@ -6,56 +6,49 @@ import { formatDistanceToNow } from 'date-fns';
 import './TaskList.css';
 import Task from '../Task';
 
-const TaskList = ( { todos, filterTodoData, onDeleted, onToggleCompleted }) => {
+const TaskList = ({ todos, filterTodoData, onDeleted, onToggleCompleted }) => {
+  const elements = todos.map((item) => {
+    const { id, ...itemProps } = item;
+    const timeAfterCreate = formatDistanceToNow(new Date(item.dateCreate));
 
-    const elements = todos.map((item) => {
+    let classNames = 'active';
+    let checked = false;
 
-      const { id, ...itemProps } = item;
+    if (item.completed) {
+      classNames = 'completed';
+      checked = true;
+    }
 
-      const timeAfterCreate = formatDistanceToNow(new Date(item.dateCreate));
-
-      let classNames = 'active';
-      let checked = false;
-
-      if (item.completed) {
-          classNames = 'completed';
-          checked = true;
-        }
-
-        if (filterTodoData === 'all') {
-          return (
-            <li key={id} className={classNames}>
-              <Task
-                { ...itemProps } 
-                checked={checked}
-                timeAfterCreate={timeAfterCreate}
-                onDeleted={() => onDeleted(id)}
-                onToggleCompleted={() => onToggleCompleted(id)}
-              />
-            </li>
-          );
-        };  
-        if (classNames === filterTodoData) {
-          return (
-            <li key={id} className={classNames}>
-              <Task
-                { ...itemProps } 
-                checked={checked}
-                timeAfterCreate={timeAfterCreate}
-                onDeleted={() => onDeleted(id)}
-                onToggleCompleted={() => onToggleCompleted(id)}
-              />
-            </li>
-          );
-        }
-    });
-
-    return (
-        <ul className="todo-list">
-            { elements }
-        </ul>
-    );
-}
+    if (filterTodoData === 'all') {
+      return (
+        <li key={id} className={classNames}>
+          <Task
+            {...itemProps}
+            checked={checked}
+            timeAfterCreate={timeAfterCreate}
+            onDeleted={() => onDeleted(id)}
+            onToggleCompleted={() => onToggleCompleted(id)}
+          />
+        </li>
+      );
+    }
+    if (classNames === filterTodoData) {
+      return (
+        <li key={id} className={classNames}>
+          <Task
+            {...itemProps}
+            checked={checked}
+            timeAfterCreate={timeAfterCreate}
+            onDeleted={() => onDeleted(id)}
+            onToggleCompleted={() => onToggleCompleted(id)}
+          />
+        </li>
+      );
+    }
+    return null;
+  });
+  return <ul className="todo-list">{elements}</ul>;
+};
 
 TaskList.defaultProps = {
   filterTodoData: 'all',

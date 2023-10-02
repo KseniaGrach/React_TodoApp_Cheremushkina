@@ -1,3 +1,3 @@
-import AppTodo from "./AppTodo";
+import AppTodo from './AppTodo';
 
 export default AppTodo;

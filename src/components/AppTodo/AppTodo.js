@@ -8,17 +8,16 @@ import Footer from '../Footer';
 import './AppTodo.css';
 
 export default class AppTodo extends Component {
-
   maxId = 100;
 
-  state = { 
+  state = {
     todoData: [
       this.createTodoTask('Completed task'),
       this.createTodoTask('Editing task'),
-      this.createTodoTask('Active task')
+      this.createTodoTask('Active task'),
     ],
-      filterTodoData: 'all'
-  }
+    filterTodoData: 'all',
+  };
 
   static defaultProps = {
     todoData: [
@@ -37,66 +36,50 @@ export default class AppTodo extends Component {
   };
 
   DeletedTask = (id) => {
-
     this.setState(({ todoData }) => {
-
       const idx = todoData.findIndex((el) => el.id === id);
-    
-      const newArray = [
-        ...todoData.slice(0, idx),
-        ...todoData.slice(idx + 1)
-      ];
+
+      const newArray = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
 
       return {
-        todoData: newArray
+        todoData: newArray,
       };
     });
   };
-
 
   createTodoTask(label) {
     return {
       label,
       dateCreate: new Date(),
       completed: false,
-      id: this.maxId++
-    }
+      id: this.maxId++,
+    };
   }
 
   addTask = (text) => {
     const newTask = this.createTodoTask(text);
 
     this.setState(({ todoData }) => {
-
-      const newArr = [
-        ...todoData,
-        newTask
-      ];
+      const newArr = [...todoData, newTask];
 
       return {
-        todoData: newArr
+        todoData: newArr,
       };
     });
   };
-  
-  onToggleCompleted = (id) =>{
 
+  onToggleCompleted = (id) => {
     this.setState(({ todoData }) => {
-
       const idx = todoData.findIndex((el) => el.id === id);
 
       const oldTask = todoData[idx];
-      const newTask = {...oldTask, completed: !oldTask.completed};
+      const newTask = { ...oldTask, completed: !oldTask.completed };
 
-      const newArray = [
-        ...todoData.slice(0, idx),
-        newTask,
-        ...todoData.slice(idx + 1)
-      ];
+      const newArray = [...todoData.slice(0, idx), newTask, ...todoData.slice(idx + 1)];
 
       return {
-        todoData: newArray
-      }
+        todoData: newArray,
+      };
     });
   };
 
@@ -104,7 +87,7 @@ export default class AppTodo extends Component {
     this.setState(({ todoData }) => {
       const newArray = todoData.filter((el) => el.completed === false);
       return {
-        todoData: newArray
+        todoData: newArray,
       };
     });
   };
@@ -116,8 +99,7 @@ export default class AppTodo extends Component {
   };
 
   render() {
-
-    const { todoData, filterTodoData} = this.state;
+    const { todoData, filterTodoData } = this.state;
     const completedCount = todoData.filter((el) => el.completed).length;
 
     const todoCount = todoData.length - completedCount;
@@ -125,20 +107,17 @@ export default class AppTodo extends Component {
     return (
       <div className="todoapp">
         <header className="header">
-            <h1>todos</h1>
-            <NewTaskForm onTaskAdded={this.addTask}/>
+          <h1>todos</h1>
+          <NewTaskForm onTaskAdded={this.addTask} />
         </header>
-        <TaskList 
-          todos={todoData} 
+        <TaskList
+          todos={todoData}
           onDeleted={this.DeletedTask}
           onToggleCompleted={this.onToggleCompleted}
-          filterTodoData={filterTodoData}/>
-        <Footer 
-          completed={todoCount}
-          clearCompleted={this.clearCompleted}
-          setTodoData={this.setTodoData}/>
-      </div> 
+          filterTodoData={filterTodoData}
+        />
+        <Footer completed={todoCount} clearCompleted={this.clearCompleted} setTodoData={this.setTodoData} />
+      </div>
     );
-  };
+  }
 }
-
