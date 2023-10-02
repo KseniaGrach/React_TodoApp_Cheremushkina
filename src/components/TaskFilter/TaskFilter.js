@@ -1,14 +1,23 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import './TaskFilter.css'
 
 export default class TaskFilter extends Component {
 
     state = {
-        allTask: true,
-        activeTask: false,
-        completedTask: false,
-      };
+      allTask: true,
+      activeTask: false,
+      completedTask: false,
+    };
+
+    static defaultProps = {
+      setTodoData: () => {},
+    };
+  
+    static propTypes = {
+      setTodoData: PropTypes.func,
+    };
 
     onClickButton = (event) => {
         const buttonClicked = event.target.innerText.toLowerCase();

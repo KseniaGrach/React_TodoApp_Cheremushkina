@@ -1,5 +1,8 @@
 import React from 'react';
 
+import PropTypes from 'prop-types';
+import { formatDistanceToNow } from 'date-fns';
+
 import './TaskList.css';
 import Task from '../Task';
 
@@ -7,40 +10,44 @@ const TaskList = ( { todos, filterTodoData, onDeleted, onToggleCompleted }) => {
 
     const elements = todos.map((item) => {
 
-        const { id, ...itemProps } = item;
+      const { id, ...itemProps } = item;
 
-        let classNames = 'active';
-        let checked = false;
+      const timeAfterCreate = formatDistanceToNow(new Date(item.dateCreate));
 
-        if (item.completed) {
-            classNames = 'completed';
-            checked = true;
-          }
+      let classNames = 'active';
+      let checked = false;
 
-          if (filterTodoData === 'all') {
-            return (
-              <li key={id} className={classNames}>
-                <Task
-                  { ...itemProps } 
-                  checked={checked}
-                  onDeleted={() => onDeleted(id)}
-                  onToggleCompleted={() => onToggleCompleted(id)}
-                />
-              </li>
-            );
-          };  
-          if (classNames === filterTodoData) {
-            return (
-              <li key={id} className={classNames}>
-                <Task
-                  { ...itemProps } 
-                  checked={checked}
-                  onDeleted={() => onDeleted(id)}
-                  onToggleCompleted={() => onToggleCompleted(id)}
-                />
-              </li>
-            );
-          }
+      if (item.completed) {
+          classNames = 'completed';
+          checked = true;
+        }
+
+        if (filterTodoData === 'all') {
+          return (
+            <li key={id} className={classNames}>
+              <Task
+                { ...itemProps } 
+                checked={checked}
+                timeAfterCreate={timeAfterCreate}
+                onDeleted={() => onDeleted(id)}
+                onToggleCompleted={() => onToggleCompleted(id)}
+              />
+            </li>
+          );
+        };  
+        if (classNames === filterTodoData) {
+          return (
+            <li key={id} className={classNames}>
+              <Task
+                { ...itemProps } 
+                checked={checked}
+                timeAfterCreate={timeAfterCreate}
+                onDeleted={() => onDeleted(id)}
+                onToggleCompleted={() => onToggleCompleted(id)}
+              />
+            </li>
+          );
+        }
     });
 
     return (
@@ -49,5 +56,17 @@ const TaskList = ( { todos, filterTodoData, onDeleted, onToggleCompleted }) => {
         </ul>
     );
 }
+
+TaskList.defaultProps = {
+  filterTodoData: 'all',
+  todos: () => {},
+  onDeleted: () => {},
+};
+
+TaskList.propTypes = {
+  filterTodoData: PropTypes.string,
+  todos: PropTypes.instanceOf(Array),
+  onDeleted: PropTypes.func,
+};
 
 export default TaskList;

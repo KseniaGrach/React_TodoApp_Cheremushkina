@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import NewTaskForm from '../NewTaskForm';
 import TaskList from '../TaskList';
@@ -18,6 +19,22 @@ export default class AppTodo extends Component {
     ],
       filterTodoData: 'all'
   }
+
+  static defaultProps = {
+    todoData: [
+      {
+        id: 101,
+        dateCreate: new Date(),
+        completed: false,
+      },
+    ],
+    filterTodoData: 'all',
+  };
+
+  static propTypes = {
+    todoData: PropTypes.instanceOf(Array),
+    filterTodoData: PropTypes.string,
+  };
 
   DeletedTask = (id) => {
 
@@ -40,7 +57,7 @@ export default class AppTodo extends Component {
   createTodoTask(label) {
     return {
       label,
-      value: 'created 17 seconds ago',
+      dateCreate: new Date(),
       completed: false,
       id: this.maxId++
     }
@@ -100,7 +117,7 @@ export default class AppTodo extends Component {
 
   render() {
 
-    const { todoData, filterTodoData } = this.state;
+    const { todoData, filterTodoData} = this.state;
     const completedCount = todoData.filter((el) => el.completed).length;
 
     const todoCount = todoData.length - completedCount;
