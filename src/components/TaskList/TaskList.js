@@ -6,7 +6,7 @@ import { formatDistanceToNow } from 'date-fns';
 import './TaskList.css';
 import Task from '../Task';
 
-const TaskList = ({ todos, filterTodoData, onDeleted, onToggleCompleted }) => {
+const TaskList = ({ todos, onDeleted, onToggleCompleted }) => {
   const elements = todos.map((item) => {
     const { id, ...itemProps } = item;
     const timeAfterCreate = formatDistanceToNow(new Date(item.dateCreate));
@@ -19,33 +19,17 @@ const TaskList = ({ todos, filterTodoData, onDeleted, onToggleCompleted }) => {
       checked = true;
     }
 
-    if (filterTodoData === 'all') {
-      return (
-        <li key={id} className={classNames}>
-          <Task
-            {...itemProps}
-            checked={checked}
-            timeAfterCreate={timeAfterCreate}
-            onDeleted={() => onDeleted(id)}
-            onToggleCompleted={() => onToggleCompleted(id)}
-          />
-        </li>
-      );
-    }
-    if (classNames === filterTodoData) {
-      return (
-        <li key={id} className={classNames}>
-          <Task
-            {...itemProps}
-            checked={checked}
-            timeAfterCreate={timeAfterCreate}
-            onDeleted={() => onDeleted(id)}
-            onToggleCompleted={() => onToggleCompleted(id)}
-          />
-        </li>
-      );
-    }
-    return null;
+    return (
+      <li key={id} className={classNames}>
+        <Task
+          {...itemProps}
+          checked={checked}
+          timeAfterCreate={timeAfterCreate}
+          onDeleted={() => onDeleted(id)}
+          onToggleCompleted={() => onToggleCompleted(id)}
+        />
+      </li>
+    );
   });
   return <ul className="todo-list">{elements}</ul>;
 };

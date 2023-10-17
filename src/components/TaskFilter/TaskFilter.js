@@ -4,6 +4,12 @@ import PropTypes from 'prop-types';
 import './TaskFilter.css';
 
 export default class TaskFilter extends Component {
+  buttons = [
+    { name: 'all', label: 'All' },
+    { name: 'active', label: 'Active' },
+    { name: 'completed', label: 'Completed' },
+  ];
+
   state = {
     allTask: true,
     activeTask: false,
@@ -18,72 +24,18 @@ export default class TaskFilter extends Component {
     setTodoData: PropTypes.func,
   };
 
-  onClickButton = (event) => {
-    const buttonClicked = event.target.innerText.toLowerCase();
-    if (buttonClicked === 'all') {
-      this.setState({
-        allTask: true,
-        activeTask: false,
-        completedTask: false,
-      });
-    } else if (buttonClicked === 'active') {
-      this.setState({
-        allTask: false,
-        activeTask: true,
-        completedTask: false,
-      });
-    } else {
-      this.setState({
-        allTask: false,
-        activeTask: false,
-        completedTask: true,
-      });
-    }
-  };
-
   render() {
-    const { setTodoData } = this.props;
-    const { allTask, activeTask, completedTask } = this.state;
+    const { filter, onFilterChange } = this.props;
+    const buttons = this.buttons.map(({ name, label }) => {
+      const isActive = filter === name;
+      const clazz = isActive ? 'selected' : '';
+      return (
+        <button type="button" className={`btn ${clazz} `} key={name} onClick={() => onFilterChange(name)}>
+          {label}
+        </button>
+      );
+    });
 
-    return (
-      <ul className="filters">
-        <li>
-          <button
-            type="button"
-            className={allTask ? 'selected' : ''}
-            onClick={(event) => {
-              setTodoData(event);
-              this.onClickButton(event);
-            }}
-          >
-            All
-          </button>
-        </li>
-        <li>
-          <button
-            type="button"
-            className={activeTask ? 'selected' : ''}
-            onClick={(event) => {
-              setTodoData(event);
-              this.onClickButton(event);
-            }}
-          >
-            Active
-          </button>
-        </li>
-        <li>
-          <button
-            type="button"
-            className={completedTask ? 'selected' : ''}
-            onClick={(event) => {
-              setTodoData(event);
-              this.onClickButton(event);
-            }}
-          >
-            Completed
-          </button>
-        </li>
-      </ul>
-    );
+    return <ul className="filters">{buttons}</ul>;
   }
 }

@@ -35,11 +35,26 @@ export default class AppTodo extends Component {
     filterTodoData: PropTypes.string,
   };
 
+  filter(items, filterTodoData) {
+    switch (filterTodoData) {
+      case 'all':
+        return items;
+      case 'active':
+        return items.filter((item) => !item.completed);
+      case 'completed':
+        return items.filter((item) => item.completed);
+      default:
+        return items;
+    }
+  }
+
+  onFilterChange = (filterTodoData) => {
+    this.setState({ filterTodoData });
+  };
+
   DeletedTask = (id) => {
     this.setState(({ todoData }) => {
-      const idx = todoData.findIndex((el) => el.id === id);
-
-      const newArray = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
+      const newArray = todoData.filter((el) => el.id !== id);
 
       return {
         todoData: newArray,
@@ -92,14 +107,10 @@ export default class AppTodo extends Component {
     });
   };
 
-  setTodoData = (event) => {
-    this.setState({
-      filterTodoData: event.target.innerText.toLowerCase(),
-    });
-  };
-
   render() {
     const { todoData, filterTodoData } = this.state;
+    const visibleItems = this.filter(todoData, filterTodoData);
+
     const completedCount = todoData.filter((el) => el.completed).length;
 
     const todoCount = todoData.length - completedCount;
@@ -111,12 +122,17 @@ export default class AppTodo extends Component {
           <NewTaskForm onTaskAdded={this.addTask} />
         </header>
         <TaskList
-          todos={todoData}
+          todos={visibleItems}
           onDeleted={this.DeletedTask}
           onToggleCompleted={this.onToggleCompleted}
           filterTodoData={filterTodoData}
         />
-        <Footer completed={todoCount} clearCompleted={this.clearCompleted} setTodoData={this.setTodoData} />
+        <Footer
+          completed={todoCount}
+          clearCompleted={this.clearCompleted}
+          filter={filterTodoData}
+          onFilterChange={this.onFilterChange}
+        />
       </div>
     );
   }
