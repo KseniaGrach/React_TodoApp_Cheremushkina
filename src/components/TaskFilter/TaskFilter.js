@@ -10,18 +10,12 @@ export default class TaskFilter extends Component {
     { name: 'completed', label: 'Completed' },
   ];
 
-  state = {
-    allTask: true,
-    activeTask: false,
-    completedTask: false,
-  };
-
   static defaultProps = {
-    setTodoData: () => {},
+    onFilterChange: () => {},
   };
 
   static propTypes = {
-    setTodoData: PropTypes.func,
+    onFilterChange: PropTypes.func,
   };
 
   render() {
